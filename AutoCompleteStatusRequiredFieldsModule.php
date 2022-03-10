@@ -16,14 +16,15 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
     {
         $settings = ExternalModules::getProjectSettingsAsArray($this->PREFIX, $project_id);
         $instrumentsToBeChecked = $settings['instruments_to_be_checked']['value'];
+        // get the current value of 'complete'
+        $currentCompleteStatusValue = $_POST[$instrument . '_complete'];
 
-        if (is_null($instrumentsToBeChecked[0]) || in_array($instrument, $instrumentsToBeChecked)) {
-            $isAllRequiredFielsEntered = $this->checkRequiredFields($instrument);
+        // do not do the below if it is a delete action, ie $currentCompleteStatusValue is not set
+        if (isset($currentCompleteStatusValue) && is_null($instrumentsToBeChecked[0]) || in_array($instrument, $instrumentsToBeChecked)) {
+            $isAllRequiredFieldsEntered = $this->checkRequiredFields($instrument);
 
-            // get the current value of 'complete'
-            $currentCompleteStatusValue = $_POST["$instrument . '_complete'"];
             // if it is the same, do not update it
-            if (isset($currentCompleteStatusValue) && $isAllRequiredFielsEntered == $currentCompleteStatusValue) {
+            if ($isAllRequiredFieldsEntered == $currentCompleteStatusValue) {
                 return;
             }
 
@@ -36,7 +37,7 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
             $arrVarNames = array_merge(
                 array($redcapRecordIdFieldName => $record,
                     'redcap_event_name' => $redcapEventName,
-                    $instrument . '_complete' => $isAllRequiredFielsEntered
+                    $instrument . '_complete' => $isAllRequiredFieldsEntered
                 )
             );
 
@@ -59,8 +60,6 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
             $jsonData = json_encode(array($arrVarNames));
             $saveResponse = REDCap::saveData($project_id, 'json', $jsonData, 'overwrite');
 
-
-
             if (count($saveResponse['errors'])>0) {
                 $errors = $saveResponse['errors'];
 
@@ -71,7 +70,7 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
                 error_log($message);
             } else {
                 // save to REDCap log
-                if ($isAllRequiredFielsEntered === 2)
+                if ($isAllRequiredFieldsEntered === 2)
                 {
                     $detail = "All required fields at '$instrument' are entered";
                 }
