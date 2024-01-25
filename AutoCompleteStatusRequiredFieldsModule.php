@@ -20,7 +20,7 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
         $currentCompleteStatusValue = $_POST[$instrument . '_complete'];
 
         // do not do the below if it is a delete action, ie $currentCompleteStatusValue is not set
-        if (isset($currentCompleteStatusValue) && is_null($instrumentsToBeChecked[0]) || in_array($instrument, $instrumentsToBeChecked)) {
+        if (isset($currentCompleteStatusValue) && (is_null($instrumentsToBeChecked[0]) || in_array($instrument, $instrumentsToBeChecked))) {
             $isAllRequiredFieldsEntered = $this->checkRequiredFields($instrument);
 
             // if it is the same, do not update it
