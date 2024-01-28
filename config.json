@@ -2,7 +2,6 @@
   "name": "Auto Complete Form Status Based on Required Fields",
   "namespace": "Monash\\Helix\\AutoCompleteStatusRequiredFieldsModule",
   "description": "This external module will set the Form Status 'Complete?' dropdown automatically to 'Complete' when all required fields are entered, and set to 'Incomplete' when not all required fields are entered.",
-  "framework-version": 12,
 
   "authors": [
     {
