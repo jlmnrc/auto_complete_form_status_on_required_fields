@@ -2,18 +2,14 @@
   "name": "Auto Complete Form Status Based on Required Fields",
   "namespace": "Monash\\Helix\\AutoCompleteStatusRequiredFieldsModule",
   "description": "This external module will set the Form Status 'Complete?' dropdown automatically to 'Complete' when all required fields are entered, and set to 'Incomplete' when not all required fields are entered.",
-
+  "framework-version": 12,
+  
   "authors": [
     {
       "name": "John Liman",
       "email": "john.liman@monash.edu",
       "institution": "Helix, Monash University, Australia"
     }
-  ],
-
-  "permissions": [
-    "redcap_save_record",
-    "redcap_data_entry_form_top"
   ],
 
   "project-settings": [
@@ -52,8 +48,6 @@
 
   "compatibility": {
     "php-version-min": "7.0.0",
-    "php-version-max": "",
-    "redcap-version-min": "8.0.0",
-    "redcap-version-max": ""
+    "php-version-max": ""
   }
 }
