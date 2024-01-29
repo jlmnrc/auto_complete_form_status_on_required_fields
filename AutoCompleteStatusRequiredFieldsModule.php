@@ -8,10 +8,6 @@ use REDCap;
 
 class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
 {
-    public function __construct() {
-        parent::__construct();
-    }
-
     function redcap_save_record($project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance)
     {
         $settings = ExternalModules::getProjectSettingsAsArray($this->PREFIX, $project_id);
