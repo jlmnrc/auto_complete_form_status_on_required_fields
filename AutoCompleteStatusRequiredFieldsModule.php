@@ -99,7 +99,7 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
             // Only check field's value if the field is required and not part of hidden required fields
             if ($Proj->metadata[$this_field]['field_req'] && !in_array($this_field, $emptyReqFields))
             {
-                // skip the @HIDDEN tags - as Form Status field is not in a survey so there is no need to skip @HIDDEN-SURVEY
+                // skip the @HIDDEN tags except the @HIDDEN-SURVEY tag
                 $actionTags = str_replace(array("\r", "\n", "\t"), array(" ", " ", " "), $Proj->metadata[$this_field]['misc']);
                 $actionTagsArr = explode(" ", $actionTags);
                 if (array_intersect($actionTagsArr, ['@HIDDEN', '@HIDDEN-FORM'])) {
