@@ -13,6 +13,7 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
         $settings = ExternalModules::getProjectSettingsAsArray($this->PREFIX, $project_id);
         $instrumentsToBeChecked = $settings['instruments_to_be_checked']['value'];
         // get the current value of 'complete'
+
         $currentCompleteStatusValue = $_POST[$instrument . '_complete'];
 
         // do not do the below if it is a delete action, ie $currentCompleteStatusValue is not set
@@ -98,10 +99,10 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
             // Only check field's value if the field is required and not part of hidden required fields
             if ($Proj->metadata[$this_field]['field_req'] && !in_array($this_field, $emptyReqFields))
             {
-                // skip only @HIDDEN tag - as Form Status field is not in a survey so there is no need to skip @HIDDEN-SURVEY
+                // skip the @HIDDEN tags - as Form Status field is not in a survey so there is no need to skip @HIDDEN-SURVEY
                 $actionTags = str_replace(array("\r", "\n", "\t"), array(" ", " ", " "), $Proj->metadata[$this_field]['misc']);
                 $actionTagsArr = explode(" ", $actionTags);
-                if (in_array('@HIDDEN', $actionTagsArr)) {
+                if (array_intersect($actionTagsArr, ['@HIDDEN', '@HIDDEN-FORM'])) {
                     continue;
                 }
 
