@@ -57,14 +57,14 @@ class AutoCompleteStatusRequiredFieldsModule extends AbstractExternalModule
             $jsonData = json_encode(array($arrVarNames));
             $saveResponse = REDCap::saveData($project_id, 'json', $jsonData, 'overwrite');
 
-            if (count($saveResponse['errors'])>0) {
-                $errors = $saveResponse['errors'];
+            if ((is_array($saveResponse['errors']) && count($saveResponse['errors'])>0) ||
+                (!is_array($saveResponse['errors']) && !empty($saveResponse['errors'])) ) {
 
-                $errorString = stripslashes(json_encode($errors, JSON_PRETTY_PRINT));
-                $errorString = str_replace('""', '"', $errorString);
+                $errors = print_r($saveResponse['errors'], true);
 
-                $message = "The " . $this->getModuleName() . " could not save $instrument form status because of the following error(s):\n\n$errorString";
+                $message = "The " . $this->getModuleName() . " could not save $instrument form status because of the following error(s):\n\n$errors";
                 error_log($message);
+                REDCap::logEvent($this->getModuleName(), $errors, '', $record, $event_id);
             } else {
                 // save to REDCap log
                 if ($isAllRequiredFieldsEntered === 2)
