@@ -1,6 +1,6 @@
 {
   "name": "Auto Complete Form Status Based on Required Fields",
-  "namespace": "Monash\\Helix\\AutoCompleteStatusRequiredFieldsModule",
+  "namespace": "Monash\\AutoCompleteStatusRequiredFieldsModule",
   "description": "This external module will set the Form Status 'Complete?' dropdown automatically to 'Complete' when all required fields are entered, and set to 'Incomplete' when not all required fields are entered.",
   "framework-version": 12,
 
@@ -8,16 +8,22 @@
     {
       "name": "John Liman",
       "email": "john.liman@monash.edu",
-      "institution": "SPHPM, Monash University, Australia"
+      "institution": "Monash University, Australia"
     }
   ],
 
   "project-settings": [
     {
-      "name": "What do you want to do with the Form Status 'Complete' field?",
+      "name": "Unverified status: Mark as Unverified if the field has not been Verified or Closed via the Data Resolution Workflow",
+      "key": "check_verified_status",
+      "type": "checkbox",
+      "required": false
+    },
+    {
+      "name": "What do you want to do with the Form Status 'Complete' field? If not set, it will be hidden by default",
       "key": "status_field_action",
       "type": "radio",
-      "required": true,
+      "required": false,
       "choices": [
         {
           "value": "as",
@@ -25,21 +31,67 @@
         },
         {
           "value": "hide",
-          "name": "Hide it"
+          "name": "Hide it (default)"
         },
         {
           "value": "disable",
-          "name": "Disable it"
+          "name": "Disable it (visible but read-only)"
         }
       ]
     },
 
     {
-      "name": "Apply to the following instruments/forms (leave blank to apply to all instruments)",
-      "key": "instruments_to_be_checked",
-      "type": "form-list",
+      "name": "Apply to the following instruments/forms, with optional custom logic. Add one entry per group of instruments, or check the 'default' box in an entry to apply it to all instruments without their own entry. If no entries are added at all, the module applies to all instruments using the required fields check only",
+      "key": "custom_logic_settings",
+      "type": "sub_settings",
       "repeatable": true,
-      "select2": true
+      "sub_settings": [
+        {
+          "name": "Instruments/forms this entry applies to",
+          "key": "custom_logic_instrument",
+          "type": "form-list",
+          "repeatable": true,
+          "select2": true,
+          "required": false
+        },
+        {
+          "name": "Use this entry as the default for all instruments that do not have their own entry",
+          "key": "custom_logic_apply_to_all",
+          "type": "checkbox",
+          "required": false,
+          "branchingLogic": {
+            "field": "custom_logic_instrument",
+            "op": "=",
+            "value": ""
+          }
+        },
+        {
+          "name": "Custom logic (optional): REDCap logic that must evaluate to TRUE for the form to be marked Complete, e.g. [age] > 18 and [consent(1)] = '1'. Leave blank to use the required fields check only",
+          "key": "custom_logic",
+          "type": "textarea",
+          "required": false
+        },
+        {
+          "name": "How should this custom logic be combined with the default 'all required fields entered' check? If not selected, AND is used by default",
+          "key": "custom_logic_combination",
+          "type": "radio",
+          "required": false,
+          "choices": [
+            {
+              "value": "and",
+              "name": "AND - all required fields must be entered AND the custom logic must be true (default)"
+            },
+            {
+              "value": "or",
+              "name": "OR - either all required fields entered OR the custom logic is true"
+            },
+            {
+              "value": "none",
+              "name": "NONE - just use the custom logic (ignore the required fields check)"
+            }
+          ]
+        }
+      ]
     }
   ],
 
